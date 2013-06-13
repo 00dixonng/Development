@@ -8,21 +8,16 @@ import com.glassbox.webinvoice.shared.Constants.CwConstants;
 import com.glassbox.webinvoice.shared.model.ClientInfo;
 import com.google.gwt.cell.client.CheckboxCell;
 import com.google.gwt.cell.client.EditTextCell;
-import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.cell.client.TextCell;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.safehtml.shared.SafeHtmlUtils;
+import com.google.gwt.dom.client.AnchorElement;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.ColumnSortEvent.ListHandler;
 import com.google.gwt.user.cellview.client.SimplePager;
-import com.google.gwt.user.cellview.client.SimplePager.TextLocation;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.view.client.DefaultSelectionEventManager;
 import com.google.gwt.view.client.MultiSelectionModel;
 import com.google.gwt.view.client.SelectionModel;
 import java.util.ArrayList;
@@ -39,14 +34,13 @@ public class Clients extends Composite {
     /**
      * The main CellTable.
      */
-    @UiField(provided = true)
-            CellTable<ClientInfo> cellTable;
+    @UiField AnchorElement newclient;
     
     /**
      * The pager used to change the range of data.
      */
-    @UiField(provided = true)
-            SimplePager pager;
+    //@UiField(provided = true)
+    //        SimplePager pager;
     
     /**
      * An instance of the constants.
@@ -58,35 +52,36 @@ public class Clients extends Composite {
     
     public Clients() {
         List lst = new ArrayList();
+        newclient.setClassName("buttons");
         //initWidget(uiBinder.createAndBindUi(this));
         // Create a CellTable.
         
         // Set a key provider that provides a unique key for each contact. If key is
         // used to identify contacts when fields (such as the name and address)
         // change.
-        cellTable = new CellTable<ClientInfo>(
-                ClientInfo.KEY_PROVIDER);
-        cellTable.setWidth("100%", true);
+        //cellTable = new CellTable<ClientInfo>(
+        //        ClientInfo.KEY_PROVIDER);
+        //cellTable.setWidth("100%", true);
         
         // Do not refresh the headers and footers every time the data is updated.
-        cellTable.setAutoHeaderRefreshDisabled(true);
-        cellTable.setAutoFooterRefreshDisabled(true);
+        //cellTable.setAutoHeaderRefreshDisabled(true);
+        //cellTable.setAutoFooterRefreshDisabled(true);
         
         // Attach a column sort handler to the ListDataProvider to sort the list.
         ListHandler<ClientInfo> sortHandler = new ListHandler<ClientInfo>(
                 lst);
-        cellTable.addColumnSortHandler(sortHandler);
+        //cellTable.addColumnSortHandler(sortHandler);
         
         // Create a Pager to control the table.
         SimplePager.Resources pagerResources = GWT.create(SimplePager.Resources.class);
-        pager = new SimplePager(TextLocation.CENTER, pagerResources, false, 0, true);
-        pager.setDisplay(cellTable);
+        //pager = new SimplePager(TextLocation.CENTER, pagerResources, false, 0, true);
+        //pager.setDisplay(cellTable);
         
         // Add a selection model so we can select cells.
         final SelectionModel<ClientInfo> selectionModel = new MultiSelectionModel<ClientInfo>(
                 ClientInfo.KEY_PROVIDER);
-        cellTable.setSelectionModel(selectionModel,
-                DefaultSelectionEventManager.<ClientInfo> createCheckboxManager());
+        //cellTable.setSelectionModel(selectionModel,
+        //        DefaultSelectionEventManager.<ClientInfo> createCheckboxManager());
         
         // Initialize the columns.
         initTableColumns(selectionModel, sortHandler);
@@ -117,8 +112,8 @@ public class Clients extends Composite {
                         return selectionModel.isSelected(object);
                     }
                 };
-        cellTable.addColumn(checkColumn, SafeHtmlUtils.fromSafeConstant("<br/>"));
-        cellTable.setColumnWidth(checkColumn, 40, Unit.PX);
+        //cellTable.addColumn(checkColumn, SafeHtmlUtils.fromSafeConstant("<br/>"));
+        //cellTable.setColumnWidth(checkColumn, 40, Unit.PX);
         
         // First name.
         Column<ClientInfo, String> firstNameColumn = new Column<ClientInfo, String>(
@@ -145,7 +140,7 @@ public class Clients extends Composite {
             }
         });
         */
-        cellTable.setColumnWidth(firstNameColumn, 20, Unit.PCT);
+        //cellTable.setColumnWidth(firstNameColumn, 20, Unit.PCT);
         
         // Last name.
         Column<ClientInfo, String> lastNameColumn = new Column<ClientInfo, String>(
@@ -173,7 +168,7 @@ public class Clients extends Composite {
             }
         });
         */
-        cellTable.setColumnWidth(lastNameColumn, 20, Unit.PCT);
+        //cellTable.setColumnWidth(lastNameColumn, 20, Unit.PCT);
         
         // Address.
         Column<ClientInfo, String> addressColumn = new Column<ClientInfo, String>(
@@ -192,7 +187,7 @@ public class Clients extends Composite {
             }
         });
         //cellTable.addColumn(addressColumn, constants.cwCellTableColumnAddress());
-        cellTable.setColumnWidth(addressColumn, 60, Unit.PCT);
+        //cellTable.setColumnWidth(addressColumn, 60, Unit.PCT);
     }
     
 }
