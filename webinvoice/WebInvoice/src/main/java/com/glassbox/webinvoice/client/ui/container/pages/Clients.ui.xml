@@ -6,11 +6,13 @@ Uncomment this for XHTML entities
              xmlns:g="urn:import:com.google.gwt.user.client.ui"
              xmlns:c="urn:import:com.google.gwt.user.cellview.client">
     <ui:style>
+        @external .buttons;      
         .cellTable {
         border-bottom: 1px solid #ccc;
         text-align: left;
         margin-bottom: 4px;
         }
+        
         .buttons {
         -moz-box-shadow:inset 0px 1px 0px 0px #ffffff;
         -webkit-box-shadow:inset 0px 1px 0px 0px #ffffff;
@@ -28,9 +30,13 @@ Uncomment this for XHTML entities
         padding:6px 40px;
         text-decoration:none;
         text-shadow:1px 1px 0px #ffffff;
-        }.buttons:hover {
+        }
+        
+        .buttons:hover {
         background-color:#fcfcfc;
-        }.buttons:active {
+        }
+        
+        .buttons:active {
         position:relative;
         top:1px;
         }
@@ -40,6 +46,9 @@ Uncomment this for XHTML entities
             <tr>
                 <td>
                     <a ui:field="newclient" href="#" class="buttons">New Client</a>
+                    <a ui:field="editclient" href="#" class="buttons">Edit Client</a>
+                    <a ui:field="delclient" href="#" class="buttons">Delete Client</a>
+                    <a ui:field="importclient" href="#" class="buttons">Import</a>
                     <br/>                                     
                 </td>
                 <td>

@@ -91,6 +91,7 @@ public class Container extends Composite {
     public void ShowLoginDialog() {
         login = new LoginBox(mainPanel);
         this.login.show();
+        this.login.setLoginFocus();
     }
     
     public void HideLoginDialog() {

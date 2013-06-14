@@ -11,6 +11,7 @@ import com.google.gwt.cell.client.EditTextCell;
 import com.google.gwt.cell.client.TextCell;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.AnchorElement;
+import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.cellview.client.Column;
@@ -131,15 +132,15 @@ public class Clients extends Composite {
             }
         });
         /*cellTable.addColumn(firstNameColumn, constants.cwCellTableColumnFirstName());
-        firstNameColumn.setFieldUpdater(new FieldUpdater<ClientInfo, String>() {
-            @Override
-            public void update(int index, ClientInfo object, String value) {
-                // Called when the user changes the value.
-                object.setFirstName(value);
-                //ContactDatabase.get().refreshDisplays();
-            }
-        });
-        */
+         * firstNameColumn.setFieldUpdater(new FieldUpdater<ClientInfo, String>() {
+         * @Override
+         * public void update(int index, ClientInfo object, String value) {
+         * // Called when the user changes the value.
+         * object.setFirstName(value);
+         * //ContactDatabase.get().refreshDisplays();
+         * }
+         * });
+         */
         //cellTable.setColumnWidth(firstNameColumn, 20, Unit.PCT);
         
         // Last name.
@@ -158,16 +159,16 @@ public class Clients extends Composite {
             }
         });
         /*
-        cellTable.addColumn(lastNameColumn, constants.cwCellTableColumnLastName());
-        lastNameColumn.setFieldUpdater(new FieldUpdater<ClientInfo, String>() {
-            @Override
-            public void update(int index, ClientInfo object, String value) {
-                // Called when the user changes the value.
-                object.setLastName(value);
-                //ContactDatabase.get().refreshDisplays();
-            }
-        });
-        */
+         * cellTable.addColumn(lastNameColumn, constants.cwCellTableColumnLastName());
+         * lastNameColumn.setFieldUpdater(new FieldUpdater<ClientInfo, String>() {
+         * @Override
+         * public void update(int index, ClientInfo object, String value) {
+         * // Called when the user changes the value.
+         * object.setLastName(value);
+         * //ContactDatabase.get().refreshDisplays();
+         * }
+         * });
+         */
         //cellTable.setColumnWidth(lastNameColumn, 20, Unit.PCT);
         
         // Address.
