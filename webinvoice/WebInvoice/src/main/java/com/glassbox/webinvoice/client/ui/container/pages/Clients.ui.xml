@@ -11,34 +11,47 @@ Uncomment this for XHTML entities
         text-align: left;
         margin-bottom: 4px;
         }
+        .buttons {
+        -moz-box-shadow:inset 0px 1px 0px 0px #ffffff;
+        -webkit-box-shadow:inset 0px 1px 0px 0px #ffffff;
+        box-shadow:inset 0px 1px 0px 0px #ffffff;
+        background-color:#ededed;
+        -moz-border-radius:5px;
+        -webkit-border-radius:5px;
+        border-radius:5px;
+        border:1px solid #8a808a;
+        display:inline-block;
+        color:#777777;
+        font-family:arial;
+        font-size:14px;
+        font-weight:bold;
+        padding:6px 40px;
+        text-decoration:none;
+        text-shadow:1px 1px 0px #ffffff;
+        }.buttons:hover {
+        background-color:#fcfcfc;
+        }.buttons:active {
+        position:relative;
+        top:1px;
+        }
     </ui:style>
     <g:HTMLPanel>
-        <g:DockLayoutPanel unit='EM'>
-            <g:west size='2'>
-                <g:HTML>WEST</g:HTML> 
-            </g:west>
-            <g:center>
-                <g:HTMLPanel>
-                    <table cellspacing='0' cellpadding='0' style='width:100%;'>
+        <table style="border:solid 1px black;">
+            <tr>
+                <td>
+                    <a ui:field="newclient" href="#" class="buttons">New Client</a>
+                    <br/>                                     
+                </td>
+                <td>
+                    <table style="border:solid 1px black;">
                         <tr>
-                            <td
-                                valign='top'>
-                                <c:CellTable
-                                    addStyleNames='{style.cellTable}'
-                                    pageSize='15'
-                                    ui:field='cellTable' />
+                            <td>
+                                
                             </td>
                         </tr>
-                        <tr>
-                            <td
-                                align='center'>
-                                <c:SimplePager
-                                    ui:field='pager' />
-                            </td>
-                        </tr>
-                    </table>
-                </g:HTMLPanel>
-            </g:center>
-        </g:DockLayoutPanel>
+                    </table>   
+                </td>
+            </tr>
+        </table>
     </g:HTMLPanel>
 </ui:UiBinder>
