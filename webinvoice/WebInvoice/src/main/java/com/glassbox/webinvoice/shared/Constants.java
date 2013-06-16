@@ -10,6 +10,7 @@ package com.glassbox.webinvoice.shared;
  */
 public class Constants {
     public static final String EMPTY_STRING = "";
+    public static final String EMPTY_DATATABLE_MESSAGE = "No data.";
     public static interface CwConstants {
         String cwCellTableColumnAddress();
         

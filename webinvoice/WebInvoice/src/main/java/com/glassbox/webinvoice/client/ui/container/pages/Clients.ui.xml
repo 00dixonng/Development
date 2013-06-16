@@ -30,6 +30,7 @@ Uncomment this for XHTML entities
         padding:6px 40px;
         text-decoration:none;
         text-shadow:1px 1px 0px #ffffff;
+        width:90px;
         }
         
         .buttons:hover {
@@ -42,20 +43,52 @@ Uncomment this for XHTML entities
         }
     </ui:style>
     <g:HTMLPanel>
-        <table style="border:solid 1px black;">
+        <table>
             <tr>
                 <td>
                     <a ui:field="newclient" href="#" class="buttons">New Client</a>
+                    <br/>
+                    <br/>
                     <a ui:field="editclient" href="#" class="buttons">Edit Client</a>
+                    <br/>
+                    <br/>
                     <a ui:field="delclient" href="#" class="buttons">Delete Client</a>
-                    <a ui:field="importclient" href="#" class="buttons">Import</a>
+                    <br/>
+                    <br/>
+                    <a ui:field="importclient" href="#" class="buttons">Import Data</a>
+                    <br/>
+                    <br/>
                     <br/>                                     
                 </td>
                 <td>
-                    <table style="border:solid 1px black;">
+                    <table>
                         <tr>
                             <td>
-                                
+                                <g:DockLayoutPanel
+                                    unit="EM">
+                                    <!-- DataGrid. -->
+                                    <g:center>
+                                        <c:DataGrid
+                                            ui:field='dataGrid' />
+                                    </g:center>
+
+                                    <!-- Pager. -->
+                                    <g:south
+                                        size="3">
+                                        <g:HTMLPanel>
+                                            <table
+                                                style="width:100%">
+                                                <tr>
+                                                    <td
+                                                        align='center'>
+                                                        <c:SimplePager
+                                                            ui:field='pager' />
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </g:HTMLPanel>
+                                    </g:south>
+                                </g:DockLayoutPanel>
                             </td>
                         </tr>
                     </table>   
