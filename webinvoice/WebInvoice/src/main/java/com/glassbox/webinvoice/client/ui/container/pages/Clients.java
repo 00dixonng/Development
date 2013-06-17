@@ -30,6 +30,7 @@ import com.google.gwt.view.client.DefaultSelectionEventManager;
 import com.google.gwt.view.client.MultiSelectionModel;
 import com.google.gwt.view.client.SelectionModel;
 import java.util.Comparator;
+import java.util.List;
 
 /**
  *
@@ -58,17 +59,16 @@ public class Clients extends Composite {
     interface ClientsUiBinder extends UiBinder<Widget, Clients> {
     }
     
-    public Clients() {
-        this.clientservice = new ClientServiceClientImpl(GWT.getModuleBaseURL() + "services/client");
-
-        this.init();
-        
+    public Clients(Object main) {
+        this.clientservice = new ClientServiceClientImpl(GWT.getModuleBaseURL() + "services/client", (Main)main);
+        clientservice.getAllClients();
+      
         // Create the UiBinder.
         Widget widget = uiBinder.createAndBindUi(this);
         initWidget(widget);
     }
     
-  private void init() {
+  public void initGrid(List<Client> data) {
     // Create a DataGrid.
 
     /*
@@ -90,7 +90,7 @@ public class Clients extends Composite {
     dataGrid.setEmptyTableWidget(new Label(Constants.EMPTY_DATATABLE_MESSAGE));
 
     // Attach a column sort handler to the ListDataProvider to sort the list.
-    ListHandler<Client> sortHandler = new ListHandler<Client>(clientservice.getAllClients());
+    ListHandler<Client> sortHandler = new ListHandler<Client>(data);
     dataGrid.addColumnSortHandler(sortHandler);
 
     // Create a Pager to control the table.

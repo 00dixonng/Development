@@ -8,12 +8,14 @@ import com.glassbox.webinvoice.client.ui.container.pages.Dashboard;
 import com.glassbox.webinvoice.client.ui.container.pages.HomePage;
 import com.glassbox.webinvoice.client.ui.container.pages.LoginBox;
 import com.glassbox.webinvoice.client.ui.container.pages.Services;
+import com.glassbox.webinvoice.shared.entity.Client;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Widget;
+import java.util.List;
 
 public class Container extends Composite {
     
@@ -28,6 +30,10 @@ public class Container extends Composite {
     private Clients clients;
     
     private Object mainPanel;
+
+    public void UpdateClients(List<Client> clients) {
+        this.clients.initGrid(clients);
+    }
     
     public enum ContainerType {
         StandardContainer, AuthenticatedContainer
@@ -104,7 +110,7 @@ public class Container extends Composite {
 
     public void ShowClients() {
         this.ContainerPanel.clear();
-        this.clients = new Clients();
+        this.clients = new Clients(mainPanel);
         this.ContainerPanel.add(clients);
     }
 

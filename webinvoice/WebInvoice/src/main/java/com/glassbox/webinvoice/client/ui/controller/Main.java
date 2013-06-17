@@ -55,7 +55,7 @@ public class Main extends Composite {
     }
     
     public void UpdateClients(List<Client> clients) {
-        
+        this.container.UpdateClients(clients);        
     }
 
     // <editor-fold defaultstate="collapsed" desc="Context switching based on authentication">

@@ -10,11 +10,16 @@ import com.glassbox.webinvoice.shared.entity.Client;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
  * @author mon2
  */
+@SuppressWarnings("serial")
+@Transactional(rollbackFor = RuntimeException.class)
+@Service("client")
 public class ClientServiceImpl extends RemoteServiceServlet implements
         ClientService {
     @Autowired
