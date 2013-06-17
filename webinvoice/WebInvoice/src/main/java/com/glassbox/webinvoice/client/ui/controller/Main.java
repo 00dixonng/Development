@@ -7,12 +7,14 @@ import com.glassbox.webinvoice.client.ui.footer.Footer;
 import com.glassbox.webinvoice.client.ui.header.Header;
 import com.glassbox.webinvoice.client.ui.menu.Menu;
 import com.glassbox.webinvoice.client.ui.menu.Menu.MenuType;
+import com.glassbox.webinvoice.shared.entity.Client;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Widget;
+import java.util.List;
 
 public class Main extends Composite {
     
@@ -50,6 +52,10 @@ public class Main extends Composite {
         else {
             this.container.UpdateLoginDialog(result);
         }
+    }
+    
+    public void UpdateClients(List<Client> clients) {
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="Context switching based on authentication">

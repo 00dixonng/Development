@@ -4,12 +4,14 @@
  */
 package com.glassbox.webinvoice.client.ui.container.pages;
 
+import com.glassbox.webinvoice.client.service.ClientServiceClientImpl;
+import com.glassbox.webinvoice.client.service.LoginServiceClientImpl;
+import com.glassbox.webinvoice.client.ui.controller.Main;
 import com.glassbox.webinvoice.shared.Constants;
-import com.glassbox.webinvoice.shared.Constants.CwConstants;
-import com.glassbox.webinvoice.shared.model.ClientInfo;
+import com.glassbox.webinvoice.shared.entity.Client;
 import com.google.gwt.cell.client.CheckboxCell;
 import com.google.gwt.cell.client.EditTextCell;
-import com.google.gwt.cell.client.TextCell;
+import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.AnchorElement;
 import com.google.gwt.dom.client.Style.Unit;
@@ -27,10 +29,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.DefaultSelectionEventManager;
 import com.google.gwt.view.client.MultiSelectionModel;
 import com.google.gwt.view.client.SelectionModel;
-import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.List;
-import javax.xml.bind.Binder;
 
 /**
  *
@@ -39,6 +38,7 @@ import javax.xml.bind.Binder;
 public class Clients extends Composite {
     
     private static ClientsUiBinder uiBinder = GWT.create(ClientsUiBinder.class);
+    private ClientServiceClientImpl clientservice;
     /**
      * The main CellTable.
      */
@@ -47,69 +47,28 @@ public class Clients extends Composite {
      * The main DataGrid.
      */
     @UiField(provided = true)
-            DataGrid<ClientInfo> dataGrid;
+            DataGrid<Client> dataGrid;
     
     /**
      * The pager used to change the range of data.
      */
     @UiField(provided = true)
             SimplePager pager;
-    private static CwConstants constants;
     
     interface ClientsUiBinder extends UiBinder<Widget, Clients> {
     }
     
     public Clients() {
-        List lst = new ArrayList();
-        newclient.setClassName("buttons");
-        //initWidget(uiBinder.createAndBindUi(this));
-        // Create a CellTable.
-        
-        // Set a key provider that provides a unique key for each contact. If key is
-        // used to identify contacts when fields (such as the name and address)
-        // change.
-        //cellTable = new CellTable<ClientInfo>(
-        //        ClientInfo.KEY_PROVIDER);
-        //cellTable.setWidth("100%", true);
-        
-        // Do not refresh the headers and footers every time the data is updated.
-        //cellTable.setAutoHeaderRefreshDisabled(true);
-        //cellTable.setAutoFooterRefreshDisabled(true);
-        
-        // Attach a column sort handler to the ListDataProvider to sort the list.
-        ListHandler<ClientInfo> sortHandler = new ListHandler<ClientInfo>(
-                lst);
-        //cellTable.addColumnSortHandler(sortHandler);
-        
-        // Create a Pager to control the table.
-        SimplePager.Resources pagerResources = GWT.create(SimplePager.Resources.class);
-        //pager = new SimplePager(TextLocation.CENTER, pagerResources, false, 0, true);
-        //pager.setDisplay(cellTable);
-        
-        // Add a selection model so we can select cells.
-        final SelectionModel<ClientInfo> selectionModel = new MultiSelectionModel<ClientInfo>(
-                ClientInfo.KEY_PROVIDER);
-        //cellTable.setSelectionModel(selectionModel,
-        //        DefaultSelectionEventManager.<ClientInfo> createCheckboxManager());
-        
-        // Initialize the columns.
-        initTableColumns(selectionModel, sortHandler);
-        
-        // Add the CellList to the adapter in the database.
-        //ContactDatabase.get().addDataDisplay(cellTable);
+        this.clientservice = new ClientServiceClientImpl(GWT.getModuleBaseURL() + "services/client");
+
+        this.init();
         
         // Create the UiBinder.
         Widget widget = uiBinder.createAndBindUi(this);
-        
         initWidget(widget);
     }
     
-   
-    /**
-   * Initialize this example.
-   */
-  @Override
-  public Widget onInitialize() {
+  private void init() {
     // Create a DataGrid.
 
     /*
@@ -117,7 +76,7 @@ public class Clients extends Composite {
      * used to identify contacts when fields (such as the name and address)
      * change.
      */
-    dataGrid = new DataGrid<ClientInfo>(ClientInfo.KEY_PROVIDER);
+    dataGrid = new DataGrid<Client>(Client.KEY_PROVIDER);
     dataGrid.setWidth("100%");
 
     /*
@@ -131,8 +90,7 @@ public class Clients extends Composite {
     dataGrid.setEmptyTableWidget(new Label(Constants.EMPTY_DATATABLE_MESSAGE));
 
     // Attach a column sort handler to the ListDataProvider to sort the list.
-    ListHandler<ClientInfo> sortHandler =
-        new ListHandler<ClientInfo>(.getDataProvider().getList());
+    ListHandler<Client> sortHandler = new ListHandler<Client>(clientservice.getAllClients());
     dataGrid.addColumnSortHandler(sortHandler);
 
     // Create a Pager to control the table.
@@ -141,34 +99,31 @@ public class Clients extends Composite {
     pager.setDisplay(dataGrid);
 
     // Add a selection model so we can select cells.
-    final SelectionModel<ClientInfo> selectionModel =
-        new MultiSelectionModel<ClientInfo>(ContactDatabase.ContactInfo.KEY_PROVIDER);
+    final SelectionModel<Client> selectionModel =
+        new MultiSelectionModel<Client>(Client.KEY_PROVIDER);
     dataGrid.setSelectionModel(selectionModel, DefaultSelectionEventManager
-        .<ClientInfo> createCheckboxManager());
+        .<Client> createCheckboxManager());
 
     // Initialize the columns.
     initTableColumns(selectionModel, sortHandler);
 
     // Add the CellList to the adapter in the database.
-    ContactDatabase.get().addDataDisplay(dataGrid);
+    //clientservice.get().addDataDisplay(dataGrid);
 
-    // Create the UiBinder.
-    Binder uiBinder = GWT.create(Binder.class);
-    return uiBinder.createAndBindUi(this);
   }
     
   /**
    * Add the columns to the table.
    */
-  private void initTableColumns(final SelectionModel<ClientInfo> selectionModel,
-      ListHandler<ClientInfo> sortHandler) {
+  private void initTableColumns(final SelectionModel<Client> selectionModel,
+      ListHandler<Client> sortHandler) {
     // Checkbox column. This table will uses a checkbox column for selection.
     // Alternatively, you can call dataGrid.setSelectionEnabled(true) to enable
     // mouse selection.
-    Column<ClientInfo, Boolean> checkColumn =
-        new Column<ClientInfo, Boolean>(new CheckboxCell(true, false)) {
+    Column<Client, Boolean> checkColumn =
+        new Column<Client, Boolean>(new CheckboxCell(true, false)) {
           @Override
-          public Boolean getValue(ClientInfo object) {
+          public Boolean getValue(Client object) {
             // Get the value from the selection model.
             return selectionModel.isSelected(object);
           }
@@ -177,133 +132,56 @@ public class Clients extends Composite {
     dataGrid.setColumnWidth(checkColumn, 40, Unit.PX);
 
     // First name.
-    Column<ClientInfo, String> firstNameColumn =
-        new Column<ClientInfo, String>(new EditTextCell()) {
+    Column<Client, String> firstNameColumn =
+        new Column<Client, String>(new EditTextCell()) {
           @Override
-          public String getValue(ClientInfo object) {
-            return object.getFirstName();
+          public String getValue(Client object) {
+            return object.getFirstname();
           }
         };
     firstNameColumn.setSortable(true);
-    sortHandler.setComparator(firstNameColumn, new Comparator<ClientInfo>() {
+    sortHandler.setComparator(firstNameColumn, new Comparator<Client>() {
       @Override
-      public int compare(ClientInfo o1, ClientInfo o2) {
-        return o1.getFirstName().compareTo(o2.getFirstName());
+      public int compare(Client o1, Client o2) {
+        return o1.getFirstname().compareTo(o2.getFirstname());
       }
     });
-    dataGrid.addColumn(firstNameColumn, constants.cwDataGridColumnFirstName());
-    firstNameColumn.setFieldUpdater(new FieldUpdater<ClientInfo, String>() {
+    dataGrid.addColumn(firstNameColumn, "First Name");
+    firstNameColumn.setFieldUpdater(new FieldUpdater<Client, String>() {
       @Override
-      public void update(int index, ClientInfo object, String value) {
+      public void update(int index, Client object, String value) {
         // Called when the user changes the value.
-        object.setFirstName(value);
-        ContactDatabase.get().refreshDisplays();
+        object.setFirstname(value);
+        //clientservice.get().refreshDisplays();
       }
     });
     dataGrid.setColumnWidth(firstNameColumn, 20, Unit.PCT);
 
     // Last name.
-    Column<ClientInfo, String> lastNameColumn =
-        new Column<ClientInfo, String>(new EditTextCell()) {
+    Column<Client, String> lastNameColumn =
+        new Column<Client, String>(new EditTextCell()) {
           @Override
-          public String getValue(ClientInfo object) {
-            return object.getLastName();
+          public String getValue(Client object) {
+            return object.getLastname();
           }
         };
     lastNameColumn.setSortable(true);
-    sortHandler.setComparator(lastNameColumn, new Comparator<ClientInfo>() {
+    sortHandler.setComparator(lastNameColumn, new Comparator<Client>() {
       @Override
-      public int compare(ClientInfo o1, ClientInfo o2) {
-        return o1.getLastName().compareTo(o2.getLastName());
+      public int compare(Client o1, Client o2) {
+        return o1.getLastname().compareTo(o2.getLastname());
       }
     });
-    dataGrid.addColumn(lastNameColumn, constants.cwDataGridColumnLastName());
-    lastNameColumn.setFieldUpdater(new FieldUpdater<ClientInfo, String>() {
+    dataGrid.addColumn(lastNameColumn, "Last Name");
+    lastNameColumn.setFieldUpdater(new FieldUpdater<Client, String>() {
       @Override
-      public void update(int index, ClientInfo object, String value) {
+      public void update(int index, Client object, String value) {
         // Called when the user changes the value.
-        object.setLastName(value);
-        ContactDatabase.get().refreshDisplays();
+        object.setLastname(value);
+        //clientservice.get().refreshDisplays();
       }
     });
     dataGrid.setColumnWidth(lastNameColumn, 20, Unit.PCT);
-
-    // Age.
-    Column<ContactInfo, Number> ageColumn = new Column<ContactInfo, Number>(new NumberCell()) {
-      @Override
-      public Number getValue(ContactInfo object) {
-        return object.getAge();
-      }
-    };
-    ageColumn.setSortable(true);
-    sortHandler.setComparator(ageColumn, new Comparator<ContactInfo>() {
-      @Override
-      public int compare(ContactInfo o1, ContactInfo o2) {
-        return o1.getBirthday().compareTo(o2.getBirthday());
-      }
-    });
-    Header<String> ageFooter = new Header<String>(new TextCell()) {
-      @Override
-      public String getValue() {
-        List<ContactInfo> items = dataGrid.getVisibleItems();
-        if (items.size() == 0) {
-          return "";
-        } else {
-          int totalAge = 0;
-          for (ContactInfo item : items) {
-            totalAge += item.getAge();
-          }
-          return "Avg: " + totalAge / items.size();
-        }
-      }
-    };
-    dataGrid.addColumn(ageColumn, new SafeHtmlHeader(SafeHtmlUtils.fromSafeConstant(constants
-        .cwDataGridColumnAge())), ageFooter);
-    dataGrid.setColumnWidth(ageColumn, 7, Unit.EM);
-
-    // Category.
-    final Category[] categories = ContactDatabase.get().queryCategories();
-    List<String> categoryNames = new ArrayList<String>();
-    for (Category category : categories) {
-      categoryNames.add(category.getDisplayName());
-    }
-    SelectionCell categoryCell = new SelectionCell(categoryNames);
-    Column<ContactInfo, String> categoryColumn = new Column<ContactInfo, String>(categoryCell) {
-      @Override
-      public String getValue(ContactInfo object) {
-        return object.getCategory().getDisplayName();
-      }
-    };
-    dataGrid.addColumn(categoryColumn, constants.cwDataGridColumnCategory());
-    categoryColumn.setFieldUpdater(new FieldUpdater<ContactInfo, String>() {
-      @Override
-      public void update(int index, ContactInfo object, String value) {
-        for (Category category : categories) {
-          if (category.getDisplayName().equals(value)) {
-            object.setCategory(category);
-          }
-        }
-        ContactDatabase.get().refreshDisplays();
-      }
-    });
-    dataGrid.setColumnWidth(categoryColumn, 130, Unit.PX);
-
-    // Address.
-    Column<ContactInfo, String> addressColumn = new Column<ContactInfo, String>(new TextCell()) {
-      @Override
-      public String getValue(ContactInfo object) {
-        return object.getAddress();
-      }
-    };
-    addressColumn.setSortable(true);
-    sortHandler.setComparator(addressColumn, new Comparator<ContactInfo>() {
-      @Override
-      public int compare(ContactInfo o1, ContactInfo o2) {
-        return o1.getAddress().compareTo(o2.getAddress());
-      }
-    });
-    dataGrid.addColumn(addressColumn, constants.cwDataGridColumnAddress());
-    dataGrid.setColumnWidth(addressColumn, 60, Unit.PCT);
   }
     
 }
