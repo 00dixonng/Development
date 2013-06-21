@@ -243,7 +243,7 @@ Uncomment this for XHTML entities
                 </p>
                 <p>
                     <label for="password">Password:</label>
-                    <g:TextBox ui:field="password"></g:TextBox>
+                    <g:PasswordTextBox ui:field="password"></g:PasswordTextBox>
                 </p>
                 <p id="loginsubmit">
                     <g:Button ui:field="LoginButton">Login</g:Button>

@@ -5,31 +5,31 @@
 package com.glassbox.webinvoice.client.ui.container.pages;
 
 import com.glassbox.webinvoice.client.service.ClientServiceClientImpl;
-import com.glassbox.webinvoice.client.service.LoginServiceClientImpl;
 import com.glassbox.webinvoice.client.ui.controller.Main;
 import com.glassbox.webinvoice.shared.Constants;
-import com.glassbox.webinvoice.shared.entity.Client;
 import com.google.gwt.cell.client.CheckboxCell;
-import com.google.gwt.cell.client.EditTextCell;
-import com.google.gwt.cell.client.FieldUpdater;
+import com.google.gwt.cell.client.DateCell;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.AnchorElement;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
-import com.google.gwt.user.cellview.client.ColumnSortEvent.ListHandler;
-import com.google.gwt.user.cellview.client.DataGrid;
-import com.google.gwt.user.cellview.client.SimplePager;
-import com.google.gwt.user.cellview.client.SimplePager.TextLocation;
+import com.google.gwt.user.cellview.client.HasKeyboardSelectionPolicy.KeyboardSelectionPolicy;
+import com.google.gwt.user.cellview.client.TextColumn;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.HTMLPanel;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.view.client.DefaultSelectionEventManager;
-import com.google.gwt.view.client.MultiSelectionModel;
+import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SelectionModel;
-import java.util.Comparator;
+import com.google.gwt.view.client.SingleSelectionModel;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -37,25 +37,30 @@ import java.util.List;
  * @author msushil
  */
 public class Clients extends Composite {
+    public static class Contact {
+        private final String address;
+        private final Date birthday;
+        private final String name;
+        
+        public Contact(String name, Date birthday, String address) {
+            this.name = name;
+            this.birthday = birthday;
+            this.address = address;
+        }
+    }
+    
+    @SuppressWarnings("deprecation")
+    private static final List<Contact> CONTACTS = Arrays.asList(
+            new Contact("John", new Date(80, 4, 12), "123 Fourth Avenue"),
+            new Contact("Joe", new Date(85, 2, 22), "22 Lance Ln"),
+            new Contact("George",new Date(46, 6, 6),"1600 Pennsylvania Avenue"));
+    
     
     private static ClientsUiBinder uiBinder = GWT.create(ClientsUiBinder.class);
     private ClientServiceClientImpl clientservice;
     private Main main;
-    /**
-     * The main CellTable.
-     */
     @UiField AnchorElement newclient;
-    /**
-     * The main DataGrid.
-     */
-    @UiField(provided = true)
-            DataGrid<Client> dataGrid;
-    
-    /**
-     * The pager used to change the range of data.
-     */
-    @UiField(provided = true)
-            SimplePager pager;
+    @UiField HTMLPanel container;
     
     interface ClientsUiBinder extends UiBinder<Widget, Clients> {
     }
@@ -63,127 +68,89 @@ public class Clients extends Composite {
     public Clients(Object main) {
         this.clientservice = new ClientServiceClientImpl(GWT.getModuleBaseURL() + "services/client", this.main);
         this.main = (Main)main;
-	initWidget(uiBinder.createAndBindUi(this));
+        initWidget(uiBinder.createAndBindUi(this));
+                
+        VerticalPanel panel = new VerticalPanel();
+        panel.setBorderWidth(0);
+        panel.setWidth("100%");
+        panel.setVerticalAlignment(HasVerticalAlignment.ALIGN_TOP);
+        panel.add(createClientsTable());
+        
+        // Add the widgets to the root panel.
+        container.add(panel);
     }
     
-    public void showData() {
-        clientservice.getAllClients();
-    }
-    
-    public void initGrid(List<Client> data) {
-        // Create a DataGrid.
+    private CellTable createClientsTable(){
+        CellTable<Contact> table = new CellTable<Contact>();
+        table.setKeyboardSelectionPolicy(KeyboardSelectionPolicy.ENABLED);
         
-        /*
-         * Set a key provider that provides a unique key for each contact. If key is
-         * used to identify contacts when fields (such as the name and address)
-         * change.
-         */
-        dataGrid = new DataGrid<Client>(Client.KEY_PROVIDER);
-        dataGrid.setWidth("100%");
-        
-        /*
-         * Do not refresh the headers every time the data is updated. The footer
-         * depends on the current data, so we do not disable auto refresh on the
-         * footer.
-         */
-        dataGrid.setAutoHeaderRefreshDisabled(true);
-        
-        // Set the message to display when the table is empty.
-        dataGrid.setEmptyTableWidget(new Label(Constants.EMPTY_DATATABLE_MESSAGE));
-        
-        // Attach a column sort handler to the ListDataProvider to sort the list.
-        ListHandler<Client> sortHandler = new ListHandler<Client>(data);
-        dataGrid.addColumnSortHandler(sortHandler);
-        
-        // Create a Pager to control the table.
-        SimplePager.Resources pagerResources = GWT.create(SimplePager.Resources.class);
-        pager = new SimplePager(TextLocation.CENTER, pagerResources, false, 0, true);
-        pager.setDisplay(dataGrid);
-        
-        // Add a selection model so we can select cells.
-        final SelectionModel<Client> selectionModel =
-                new MultiSelectionModel<Client>(Client.KEY_PROVIDER);
-        dataGrid.setSelectionModel(selectionModel, DefaultSelectionEventManager
-                .<Client> createCheckboxManager());
-        
-        // Initialize the columns.
-        initTableColumns(selectionModel, sortHandler);
-        
-        // Add the CellList to the adapter in the database.
-        //clientservice.get().addDataDisplay(dataGrid);
-        
-    }
-    
-    /**
-     * Add the columns to the table.
-     */
-    private void initTableColumns(final SelectionModel<Client> selectionModel,
-            ListHandler<Client> sortHandler) {
-        // Checkbox column. This table will uses a checkbox column for selection.
-        // Alternatively, you can call dataGrid.setSelectionEnabled(true) to enable
-        // mouse selection.
-        Column<Client, Boolean> checkColumn =
-                new Column<Client, Boolean>(new CheckboxCell(true, false)) {
+        //checkbox
+        Column<Contact, Boolean> checkColumn;
+        checkColumn = new Column<Contact, Boolean>(
+                new CheckboxCell(true, false)) {
                     @Override
-                    public Boolean getValue(Client object) {
-                        // Get the value from the selection model.
-                        return selectionModel.isSelected(object);
+                    public Boolean getValue(Contact object) {
+                        return true;
                     }
                 };
-        dataGrid.addColumn(checkColumn, SafeHtmlUtils.fromSafeConstant("<br/>"));
-        dataGrid.setColumnWidth(checkColumn, 40, Unit.PX);
+        table.addColumn(checkColumn, SafeHtmlUtils.fromSafeConstant("<br/>"));
+        table.setColumnWidth(checkColumn, 40, Unit.PX);
         
-        // First name.
-        Column<Client, String> firstNameColumn =
-                new Column<Client, String>(new EditTextCell()) {
+        // Add a text column to show the name.
+        TextColumn<Contact> nameColumn =
+                new TextColumn<Contact>() {
                     @Override
-                    public String getValue(Client object) {
-                        return object.getFirstname();
+                    public String getValue(Contact object) {
+                        return object.name;
                     }
                 };
-        firstNameColumn.setSortable(true);
-        sortHandler.setComparator(firstNameColumn, new Comparator<Client>() {
-            @Override
-            public int compare(Client o1, Client o2) {
-                return o1.getFirstname().compareTo(o2.getFirstname());
-            }
-        });
-        dataGrid.addColumn(firstNameColumn, "First Name");
-        firstNameColumn.setFieldUpdater(new FieldUpdater<Client, String>() {
-            @Override
-            public void update(int index, Client object, String value) {
-                // Called when the user changes the value.
-                object.setFirstname(value);
-                //clientservice.get().refreshDisplays();
-            }
-        });
-        dataGrid.setColumnWidth(firstNameColumn, 20, Unit.PCT);
+        table.addColumn(nameColumn, "Name");
         
-        // Last name.
-        Column<Client, String> lastNameColumn =
-                new Column<Client, String>(new EditTextCell()) {
+        // Add a date column to show the birthday.
+        DateCell dateCell = new DateCell();
+        Column<Contact, Date> dateColumn
+                = new Column<Contact, Date>(dateCell) {
                     @Override
-                    public String getValue(Client object) {
-                        return object.getLastname();
+                    public Date getValue(Contact object) {
+                        return object.birthday;
                     }
                 };
-        lastNameColumn.setSortable(true);
-        sortHandler.setComparator(lastNameColumn, new Comparator<Client>() {
-            @Override
-            public int compare(Client o1, Client o2) {
-                return o1.getLastname().compareTo(o2.getLastname());
-            }
-        });
-        dataGrid.addColumn(lastNameColumn, "Last Name");
-        lastNameColumn.setFieldUpdater(new FieldUpdater<Client, String>() {
-            @Override
-            public void update(int index, Client object, String value) {
-                // Called when the user changes the value.
-                object.setLastname(value);
-                //clientservice.get().refreshDisplays();
-            }
-        });
-        dataGrid.setColumnWidth(lastNameColumn, 20, Unit.PCT);
+        table.addColumn(dateColumn, "Birthday");
+        
+        // Add a text column to show the address.
+        TextColumn<Contact> addressColumn
+                = new TextColumn<Contact>() {
+                    @Override
+                    public String getValue(Contact object) {
+                        return object.address;
+                    }
+                };
+        table.addColumn(addressColumn, "Address");
+        
+        // Add a selection model to handle user selection.
+        final SingleSelectionModel<Contact> selectionModel
+                = new SingleSelectionModel<Contact>();
+        table.setSelectionModel(selectionModel);
+        selectionModel.addSelectionChangeHandler(
+                new SelectionChangeEvent.Handler() {
+                    public void onSelectionChange(SelectionChangeEvent event) {
+                        Contact selected = selectionModel.getSelectedObject();
+                        if (selected != null) {
+                            Window.alert("You selected: " + selected.name);
+                        }
+                    }
+                });
+        
+        // Set the total row count. This isn't strictly necessary,
+        // but it affects paging calculations, so its good habit to
+        // keep the row count up to date.
+        table.setRowCount(CONTACTS.size(), true);
+        table.setWidth("100", true);
+        table.setHeight(Constants.STANDARD_GRID_HEIGHT);
+        
+        // Push the data into the widget.
+        table.setRowData(0, CONTACTS);
+        return table;       
     }
     
 }

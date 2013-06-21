@@ -105,7 +105,7 @@ public class Container extends Composite {
 
     
     public void UpdateClients(List<Client> clients) {
-        this.clients.initGrid(clients);
+
     }
     
     public enum ContainerType {
@@ -185,7 +185,6 @@ public class Container extends Composite {
         clients = new Clients(mainPanel);
         this.ContainerPanel.clear();
         this.ContainerPanel.add(clients);
-        clients.showData();
     }
 
     public void ShowDashboard() {

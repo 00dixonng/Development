@@ -12,7 +12,7 @@ import com.google.gwt.view.client.ProvidesKey;
  *
  */
 @Entity
-@Table(name = "Client")
+@Table(name = "client")
 public class Client implements Serializable {
     private static final long serialVersionUID = 1L;
     
@@ -26,7 +26,7 @@ public class Client implements Serializable {
     
     // bi-directional many-to-one association to Address
     @ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.ALL })
-    @JoinColumn(name = "addressID")
+    @JoinColumn(name = "addressId")
     private Address address;
     
     // bi-directional many-to-one association to Invoice
