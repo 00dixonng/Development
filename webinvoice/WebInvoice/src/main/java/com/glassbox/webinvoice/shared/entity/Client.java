@@ -8,7 +8,7 @@ import java.util.List;
 import com.google.gwt.view.client.ProvidesKey;
 
 /**
- * The persistent class for the customer database table.
+ * The persistent class for the client database table.
  *
  */
 @Entity
@@ -30,10 +30,10 @@ public class Client implements Serializable {
     private Address address;
     
     // bi-directional many-to-one association to Invoice
-    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "client", fetch = FetchType.LAZY)
     private List<Invoice> invoices = new ArrayList<Invoice>();
     
-    @OneToMany(mappedBy = "customer", cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "client", cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
     private List<Email> emails = new ArrayList<Email>();
     
     @JoinColumn(name = "userId", referencedColumnName = "id")

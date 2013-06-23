@@ -63,7 +63,11 @@ public class User implements Serializable {
     @JoinColumn(name = "roleId", referencedColumnName = "id")
     @ManyToOne
     private Role roleId;
-   
+
+    @JoinColumn(name = "primaryEmailId", referencedColumnName = "id")
+    @ManyToOne
+    private Email primaryEmailId;
+        
     public User() {
     }
 
@@ -126,6 +130,15 @@ public class User implements Serializable {
     public void setRoleId(Role roleId) {
         this.roleId = roleId;
     }
+
+    public Email getPrimaryEmailId() {
+        return primaryEmailId;
+    }
+
+    public void setPrimaryEmailId(Email primaryEmailId) {
+        this.primaryEmailId = primaryEmailId;
+    }
+    
 
     @Override
     public int hashCode() {
