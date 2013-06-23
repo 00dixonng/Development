@@ -43,21 +43,27 @@ public class User implements Serializable {
     @Basic(optional = false)
     @Column(name = "id")
     private Long id;
+    
     @Column(name = "username")
     private String username;
+    
     @Column(name = "firstname")
     private String firstname;
+    
     @Column(name = "lastname")
     private String lastname;
+    
     @Column(name = "password")
     private String password;
+    
     @Column(name = "logintimestamp")
     @Temporal(TemporalType.TIMESTAMP)
     private Date logintimestamp;
-    @JoinColumn(name = "roleID", referencedColumnName = "id")
+    
+    @JoinColumn(name = "roleId", referencedColumnName = "id")
     @ManyToOne
-    private Role roleID;
-
+    private Role roleId;
+   
     public User() {
     }
 
@@ -113,12 +119,12 @@ public class User implements Serializable {
         this.logintimestamp = logintimestamp;
     }
 
-    public Role getRoleID() {
-        return roleID;
+    public Role getRoleId() {
+        return roleId;
     }
 
-    public void setRoleID(Role roleID) {
-        this.roleID = roleID;
+    public void setRoleId(Role roleId) {
+        this.roleId = roleId;
     }
 
     @Override

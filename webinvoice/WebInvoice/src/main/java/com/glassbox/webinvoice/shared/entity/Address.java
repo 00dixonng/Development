@@ -25,17 +25,9 @@ public class Address implements Serializable {
 
 	// bi-directional many-to-one association to Suburb
 	@ManyToOne(fetch = FetchType.EAGER, cascade = { CascadeType.ALL })
-	@JoinColumn(name = "suburb")
+	@JoinColumn(name = "suburbId")
 	private Suburb suburb;
-        
-        // bi-directional many-to-one association to State
-	@Column(name = "state")
-	@Enumerated(value = EnumType.STRING)
-	private State state;
-
-        @Column(name = "postcode")
-        private String postcode;
-                
+                     
 	public Address() {
 	}
 
@@ -47,14 +39,6 @@ public class Address implements Serializable {
 		this.id = id;
 	}
 
-	public State getState() {
-		return state;
-	}
-
-	public void setState(State state) {
-		this.state = state;
-	}
-
 	public Suburb getSuburb() {
 		return suburb;
 	}
@@ -62,5 +46,4 @@ public class Address implements Serializable {
 	public void setSuburb(Suburb suburb) {
 		this.suburb = suburb;
 	}
-
 }

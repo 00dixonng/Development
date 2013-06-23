@@ -36,6 +36,10 @@ public class Client implements Serializable {
     @OneToMany(mappedBy = "customer", cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
     private List<Email> emails = new ArrayList<Email>();
     
+    @JoinColumn(name = "userId", referencedColumnName = "id")
+    @OneToOne
+    private User userId;
+    
     public List<Email> getEmails() {
         return emails;
     }
@@ -86,7 +90,15 @@ public class Client implements Serializable {
     public void setInvoices(List<Invoice> invoices) {
         this.invoices = invoices;
     }
-    
+
+    public User getUserId() {
+        return userId;
+    }
+
+    public void setUserId(User userId) {
+        this.userId = userId;
+    }
+        
     /**
      * The key provider that provides the unique ID of a contact.
      */
@@ -96,13 +108,4 @@ public class Client implements Serializable {
             return item == null ? null : item.getId();
         }
     };
-    
-    public int compareTo(Client o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
-    public Number getAge() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
 }
