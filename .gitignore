@@ -1,2 +1,8 @@
 *.class
 /glassboxcore/GlassboxCore/nbproject/private/
+/glassboxcore/GlassboxCore/dist/
+/glassboxcore/GlassboxCore/build/
+/glassboxcore/glassboxcore/target/
+/glassboxcore/glassboxcore/nbproject/private/
+/glassboxcore/glassboxcore/dist/
+/glassboxcore/glassboxcore/build/

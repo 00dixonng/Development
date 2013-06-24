@@ -18,6 +18,7 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.HasKeyboardSelectionPolicy.KeyboardSelectionPolicy;
+import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
@@ -25,6 +26,8 @@ import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.view.client.AsyncDataProvider;
+import com.google.gwt.view.client.HasData;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SelectionModel;
 import com.google.gwt.view.client.SingleSelectionModel;
@@ -69,7 +72,7 @@ public class Clients extends Composite {
         this.clientservice = new ClientServiceClientImpl(GWT.getModuleBaseURL() + "services/client", this.main);
         this.main = (Main)main;
         initWidget(uiBinder.createAndBindUi(this));
-                
+        
         VerticalPanel panel = new VerticalPanel();
         panel.setBorderWidth(0);
         panel.setWidth("100%");
@@ -127,6 +130,22 @@ public class Clients extends Composite {
                 };
         table.addColumn(addressColumn, "Address");
         
+        AsyncDataProvider<Contact> provider = new AsyncDataProvider<Contact>() {
+            @Override
+            protected void onRangeChanged(HasData<Contact> display) {
+                int start = display.getVisibleRange().getStart();
+                int end = start + display.getVisibleRange().getLength();
+                end = end >= CONTACTS.size() ? CONTACTS.size() : end;
+                List<Contact> sub = CONTACTS.subList(start, end);
+                updateRowData(start, sub);
+            }
+        };
+        provider.addDataDisplay(table);
+        provider.updateRowCount(CONTACTS.size(), true);
+        
+        SimplePager pager = new SimplePager();
+        pager.setDisplay(table);
+        
         // Add a selection model to handle user selection.
         final SingleSelectionModel<Contact> selectionModel
                 = new SingleSelectionModel<Contact>();
@@ -149,8 +168,8 @@ public class Clients extends Composite {
         table.setHeight(Constants.STANDARD_GRID_HEIGHT);
         
         // Push the data into the widget.
-        table.setRowData(0, CONTACTS);
-        return table;       
+        //table.setRowData(0, CONTACTS);
+        return table;
     }
     
 }
