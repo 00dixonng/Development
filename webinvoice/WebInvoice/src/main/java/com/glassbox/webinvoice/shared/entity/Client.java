@@ -7,83 +7,94 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The persistent class for the customer database table.
- * 
+ * The persistent class for the client database table.
+ *
  */
 @Entity
-@Table(name = "Client")
+@Table(name = "client")
 public class Client implements Serializable {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+    
+    private String firstname;
+    
+    private String lastname;
+    
+    // bi-directional many-to-one association to Address
+    @ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.ALL })
+    @JoinColumn(name = "addressId")
+    private Address address;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
+    // bi-directional many-to-one association to Invoice
+    @OneToMany(mappedBy = "client", fetch = FetchType.LAZY)
+    private List<Invoice> invoices = new ArrayList<Invoice>();
+    
+    @OneToMany(mappedBy = "client", cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
+    private List<Email> emails = new ArrayList<Email>();
+    
+    @JoinColumn(name = "userId", referencedColumnName = "id")
+    @OneToOne
+    private User userId;
+    
+    public List<Email> getEmails() {
+        return emails;
+    }
+    
+    public void setEmails(List<Email> emails) {
+        this.emails = emails;
+    }
+    
+    public Client() {
+    }
+    
+    public long getId() {
+        return id;
+    }
+    
+    public void setId(long id) {
+        this.id = id;
+    }
+    
+    public String getFirstname() {
+        return firstname;
+    }
+    
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
+    }
+    
+    public String getLastname() {
+        return this.lastname;
+    }
+    
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
+    }
+    
+    public Address getAddress() {
+        return this.address;
+    }
+    
+    public void setAddress(Address address) {
+        this.address = address;
+    }
+    
+    public List<Invoice> getInvoices() {
+        return this.invoices;
+    }
+    
+    public void setInvoices(List<Invoice> invoices) {
+        this.invoices = invoices;
+    }
 
-	private String firstname;
+    public User getUserId() {
+        return userId;
+    }
 
-	private String lastname;
-
-	// bi-directional many-to-one association to Address
-	@ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.ALL })
-	@JoinColumn(name = "addressID")
-	private Address address;
-
-	// bi-directional many-to-one association to Invoice
-	@OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
-	private List<Invoice> invoices = new ArrayList<Invoice>();
-
-	@OneToMany(mappedBy = "customer", cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
-	private List<Email> emails = new ArrayList<Email>();
-
-	public List<Email> getEmails() {
-		return emails;
-	}
-
-	public void setEmails(List<Email> emails) {
-		this.emails = emails;
-	}
-
-	public Client() {
-	}
-
-	public long getId() {
-		return id;
-	}
-
-	public void setId(long id) {
-		this.id = id;
-	}
-
-	public String getFirstname() {
-		return firstname;
-	}
-
-	public void setFirstname(String firstname) {
-		this.firstname = firstname;
-	}
-
-	public String getLastname() {
-		return this.lastname;
-	}
-
-	public void setLastname(String lastname) {
-		this.lastname = lastname;
-	}
-
-	public Address getAddress() {
-		return this.address;
-	}
-
-	public void setAddress(Address address) {
-		this.address = address;
-	}
-
-	public List<Invoice> getInvoices() {
-		return this.invoices;
-	}
-
-	public void setInvoices(List<Invoice> invoices) {
-		this.invoices = invoices;
-	}
-
+    public void setUserId(User userId) {
+        this.userId = userId;
+    }
 }

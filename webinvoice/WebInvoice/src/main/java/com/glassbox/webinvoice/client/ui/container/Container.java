@@ -8,12 +8,15 @@ import com.glassbox.webinvoice.client.ui.container.pages.Dashboard;
 import com.glassbox.webinvoice.client.ui.container.pages.HomePage;
 import com.glassbox.webinvoice.client.ui.container.pages.LoginBox;
 import com.glassbox.webinvoice.client.ui.container.pages.Services;
+import com.glassbox.webinvoice.client.ui.controller.Main;
+import com.glassbox.webinvoice.shared.entity.Client;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Widget;
+import java.util.List;
 
 public class Container extends Composite {
     
@@ -26,8 +29,84 @@ public class Container extends Composite {
     private LoginBox login;
     private Dashboard dashboard;
     private Clients clients;
-    
     private Object mainPanel;
+
+    public HomePage getHome() {
+        return home;
+    }
+
+    public void setHome(HomePage home) {
+        this.home = home;
+    }
+
+    public AboutUs getAboutus() {
+        return aboutus;
+    }
+
+    public void setAboutus(AboutUs aboutus) {
+        this.aboutus = aboutus;
+    }
+
+    public ContactUs getContactus() {
+        return contactus;
+    }
+
+    public void setContactus(ContactUs contactus) {
+        this.contactus = contactus;
+    }
+
+    public Services getServices() {
+        return services;
+    }
+
+    public void setServices(Services services) {
+        this.services = services;
+    }
+
+    public LoginBox getLogin() {
+        return login;
+    }
+
+    public void setLogin(LoginBox login) {
+        this.login = login;
+    }
+
+    public Dashboard getDashboard() {
+        return dashboard;
+    }
+
+    public void setDashboard(Dashboard dashboard) {
+        this.dashboard = dashboard;
+    }
+
+    public Clients getClients() {
+        return clients;
+    }
+
+    public void setClients(Clients clients) {
+        this.clients = clients;
+    }
+
+    public Object getMainPanel() {
+        return mainPanel;
+    }
+
+    public void setMainPanel(Object mainPanel) {
+        this.mainPanel = mainPanel;
+    }
+
+    public HTMLPanel getContainerPanel() {
+        return ContainerPanel;
+    }
+
+    public void setContainerPanel(HTMLPanel ContainerPanel) {
+        this.ContainerPanel = ContainerPanel;
+    }
+
+    
+    public void UpdateClients(List<Client> clients) {
+
+    }
     
     public enum ContainerType {
         StandardContainer, AuthenticatedContainer
@@ -91,6 +170,7 @@ public class Container extends Composite {
     public void ShowLoginDialog() {
         login = new LoginBox(mainPanel);
         this.login.show();
+        this.login.setLoginFocus();
     }
     
     public void HideLoginDialog() {
@@ -102,14 +182,14 @@ public class Container extends Composite {
     }
 
     public void ShowClients() {
+        clients = new Clients(mainPanel);
         this.ContainerPanel.clear();
-        this.clients = new Clients();
         this.ContainerPanel.add(clients);
     }
 
     public void ShowDashboard() {
+        dashboard = new Dashboard();
         this.ContainerPanel.clear();
-        this.dashboard = new Dashboard();
         this.ContainerPanel.add(dashboard);
     }
 }

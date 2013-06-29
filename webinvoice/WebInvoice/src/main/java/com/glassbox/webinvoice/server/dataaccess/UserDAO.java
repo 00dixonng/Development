@@ -43,7 +43,7 @@ public class UserDAO extends BaseDAO<User,Long> {
                         //authenticate with email, password
                         user = (User) sf.getCurrentSession()
                                         .createQuery("from User u inner join Email e where e.userID = u.id and e.emailAddress=:username and " +
-                                                     "e.isPrimary=1 and u.password=:password")
+                                                     "u.primaryEmailId=e.id and u.password=:password")
                                         .setString("username", login).setString("password", password).uniqueResult();
                         
 

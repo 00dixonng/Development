@@ -19,15 +19,15 @@ public class Email implements Serializable {
 	private String emailAddress;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "customerID")
-	private Client customer;
+	@JoinColumn(name = "clientId")
+	private Client client;
 
-	public Client getCustomer() {
-		return customer;
+	public Client getClient() {
+		return client;
 	}
 
-	public void setCustomer(Client customer) {
-		this.customer = customer;
+	public void setClient(Client client) {
+		this.client = client;
 	}
 
 	public Email() {

@@ -12,9 +12,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
-
 import org.springframework.stereotype.Service;
-
 import com.glassbox.webinvoice.shared.DTOentity.RealEmail;
 
 
@@ -23,6 +21,7 @@ public class MailServiceImpl {
 
 	public void sendEmail(RealEmail email, String host, String user,
 			String fromEmail, String password) throws Exception {
+            
 		Properties props = new Properties();
 		props.put("mail.smtp.starttls.enable", "true");
 		props.put("mail.smtp.host", host);
@@ -30,7 +29,7 @@ public class MailServiceImpl {
 		props.put("mail.smtp.password", password);
 		props.put("mail.smtp.port", "587");
 		props.put("mail.smtp.auth", "true");
-		Session session = Session.getDefaultInstance(props, null);
+		Session session = Session.getDefaultInstance(props, null);      
 
 		Message message = new MimeMessage(session);
 

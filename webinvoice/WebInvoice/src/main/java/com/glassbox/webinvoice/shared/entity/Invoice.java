@@ -27,10 +27,10 @@ public class Invoice implements Serializable {
 
 	private String type;
 
-	// bi-directional many-to-one association to Customer
+	// bi-directional many-to-one association to client
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "customerID")
-	private Client customer;
+	@JoinColumn(name = "clientId")
+	private Client client;
 
 	// bi-directional many-to-many association to Item
 	@ManyToMany
@@ -73,11 +73,11 @@ public class Invoice implements Serializable {
 	}
 
 	public Client getClient() {
-		return this.customer;
+		return this.client;
 	}
 
-	public void setClient(Client customer) {
-		this.customer = customer;
+	public void setClient(Client client) {
+		this.client = client;
 	}
 
 	public List<Item> getItems() {

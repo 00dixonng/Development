@@ -6,11 +6,30 @@ Uncomment this for XHTML entities
              xmlns:g="urn:import:com.google.gwt.user.client.ui"
              xmlns:c="urn:import:com.google.gwt.user.cellview.client">
     <ui:style>
+        @external .buttons;
+        @external .buttonscolumn;
+        @external .gridcolumn;
+            
         .cellTable {
         border-bottom: 1px solid #ccc;
         text-align: left;
         margin-bottom: 4px;
         }
+        
+        .buttonscolumn {
+            vertical-align: top;
+            padding-top: 20px;       
+            padding-left: 20px;  
+            padding-right: 20px;  
+        }
+        
+        .gridcolumn {
+            vertical-align: top;
+            padding-top: 5px;       
+            padding-left: 5px;  
+            padding-right: 5px;  
+        }
+        
         .buttons {
         -moz-box-shadow:inset 0px 1px 0px 0px #ffffff;
         -webkit-box-shadow:inset 0px 1px 0px 0px #ffffff;
@@ -28,25 +47,42 @@ Uncomment this for XHTML entities
         padding:6px 40px;
         text-decoration:none;
         text-shadow:1px 1px 0px #ffffff;
-        }.buttons:hover {
+        width:90px;
+        }
+        
+        .buttons:hover {
         background-color:#fcfcfc;
-        }.buttons:active {
+        }
+        
+        .buttons:active {
         position:relative;
         top:1px;
         }
     </ui:style>
     <g:HTMLPanel>
-        <table style="border:solid 1px black;">
+        <table>
             <tr>
-                <td>
+                <td class="buttonscolumn">
                     <a ui:field="newclient" href="#" class="buttons">New Client</a>
+                    <br/>
+                    <br/>
+                    <a ui:field="editclient" href="#" class="buttons">Edit Client</a>
+                    <br/>
+                    <br/>
+                    <a ui:field="delclient" href="#" class="buttons">Delete Client</a>
+                    <br/>
+                    <br/>
+                    <a ui:field="importclient" href="#" class="buttons">Import Data</a>
+                    <br/>
+                    <br/>
                     <br/>                                     
                 </td>
-                <td>
-                    <table style="border:solid 1px black;">
+                <td class="gridcolumn">
+                    <table>
                         <tr>
                             <td>
-                                
+                                <g:HTMLPanel ui:field="container">
+                                 </g:HTMLPanel>
                             </td>
                         </tr>
                     </table>   
