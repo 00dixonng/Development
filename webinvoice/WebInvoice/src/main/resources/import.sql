@@ -16590,6 +16590,25 @@ INSERT INTO `webinvoice`.`client` (`firstname`, `lastname`, `addressId`) VALUES 
 INSERT INTO `webinvoice`.`client` (`firstname`, `lastname`, `addressId`) VALUES ('John', 'Smith', 8);
 INSERT INTO `webinvoice`.`client` (`firstname`, `lastname`, `addressId`) VALUES ('John', 'Smith', 9);
 INSERT INTO `webinvoice`.`client` (`firstname`, `lastname`, `addressId`) VALUES ('John', 'Smith', 10);
-
+INSERT INTO `webinvoice`.`client` (`firstname`, `lastname`, `addressId`) VALUES ('Manpreet', 'Sushil', 1);
+INSERT INTO `webinvoice`.`client` (`firstname`, `lastname`, `addressId`) VALUES ('John', 'Smith', 2);
+INSERT INTO `webinvoice`.`client` (`firstname`, `lastname`, `addressId`) VALUES ('James', 'Bond', 3);
+INSERT INTO `webinvoice`.`client` (`firstname`, `lastname`, `addressId`) VALUES ('Robert', 'Smith', 4);
+INSERT INTO `webinvoice`.`client` (`firstname`, `lastname`, `addressId`) VALUES ('Johnny', 'Bourke', 5);
+INSERT INTO `webinvoice`.`client` (`firstname`, `lastname`, `addressId`) VALUES ('John', 'Smith', 6);
+INSERT INTO `webinvoice`.`client` (`firstname`, `lastname`, `addressId`) VALUES ('John', 'Smith', 7);
+INSERT INTO `webinvoice`.`client` (`firstname`, `lastname`, `addressId`) VALUES ('John', 'Smith', 8);
+INSERT INTO `webinvoice`.`client` (`firstname`, `lastname`, `addressId`) VALUES ('John', 'Smith', 9);
+INSERT INTO `webinvoice`.`client` (`firstname`, `lastname`, `addressId`) VALUES ('John', 'Smith', 10);
+INSERT INTO `webinvoice`.`client` (`firstname`, `lastname`, `addressId`) VALUES ('Manpreet', 'Sushil', 1);
+INSERT INTO `webinvoice`.`client` (`firstname`, `lastname`, `addressId`) VALUES ('John', 'Smith', 2);
+INSERT INTO `webinvoice`.`client` (`firstname`, `lastname`, `addressId`) VALUES ('James', 'Bond', 3);
+INSERT INTO `webinvoice`.`client` (`firstname`, `lastname`, `addressId`) VALUES ('Robert', 'Smith', 4);
+INSERT INTO `webinvoice`.`client` (`firstname`, `lastname`, `addressId`) VALUES ('Johnny', 'Bourke', 5);
+INSERT INTO `webinvoice`.`client` (`firstname`, `lastname`, `addressId`) VALUES ('John', 'Smith', 6);
+INSERT INTO `webinvoice`.`client` (`firstname`, `lastname`, `addressId`) VALUES ('John', 'Smith', 7);
+INSERT INTO `webinvoice`.`client` (`firstname`, `lastname`, `addressId`) VALUES ('John', 'Smith', 8);
+INSERT INTO `webinvoice`.`client` (`firstname`, `lastname`, `addressId`) VALUES ('John', 'Smith', 9);
+INSERT INTO `webinvoice`.`client` (`firstname`, `lastname`, `addressId`) VALUES ('John', 'Smith', 10);
 
 

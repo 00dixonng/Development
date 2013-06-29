@@ -7,8 +7,8 @@ package com.glassbox.webinvoice.client.ui.container.pages;
 import com.glassbox.webinvoice.client.service.ClientServiceClientImpl;
 import com.glassbox.webinvoice.client.ui.controller.Main;
 import com.glassbox.webinvoice.shared.Constants;
+import com.glassbox.webinvoice.shared.model.ClientInfo;
 import com.google.gwt.cell.client.CheckboxCell;
-import com.google.gwt.cell.client.DateCell;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.AnchorElement;
 import com.google.gwt.dom.client.Style.Unit;
@@ -21,6 +21,7 @@ import com.google.gwt.user.cellview.client.HasKeyboardSelectionPolicy.KeyboardSe
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
@@ -29,36 +30,14 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.AsyncDataProvider;
 import com.google.gwt.view.client.HasData;
 import com.google.gwt.view.client.SelectionChangeEvent;
-import com.google.gwt.view.client.SelectionModel;
 import com.google.gwt.view.client.SingleSelectionModel;
-import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 /**
  *
  * @author msushil
  */
-public class Clients extends Composite {
-    public static class Contact {
-        private final String address;
-        private final Date birthday;
-        private final String name;
-        
-        public Contact(String name, Date birthday, String address) {
-            this.name = name;
-            this.birthday = birthday;
-            this.address = address;
-        }
-    }
-    
-    @SuppressWarnings("deprecation")
-    private static final List<Contact> CONTACTS = Arrays.asList(
-            new Contact("John", new Date(80, 4, 12), "123 Fourth Avenue"),
-            new Contact("Joe", new Date(85, 2, 22), "22 Lance Ln"),
-            new Contact("George",new Date(46, 6, 6),"1600 Pennsylvania Avenue"));
-    
-    
+public class Clients extends Composite {   
     private static ClientsUiBinder uiBinder = GWT.create(ClientsUiBinder.class);
     private ClientServiceClientImpl clientservice;
     private Main main;
@@ -74,7 +53,7 @@ public class Clients extends Composite {
         initWidget(uiBinder.createAndBindUi(this));
         
         VerticalPanel panel = new VerticalPanel();
-        panel.setBorderWidth(0);
+        panel.setBorderWidth(1);
         panel.setWidth("100%");
         panel.setVerticalAlignment(HasVerticalAlignment.ALIGN_TOP);
         panel.add(createClientsTable());
@@ -84,91 +63,91 @@ public class Clients extends Composite {
     }
     
     private CellTable createClientsTable(){
-        CellTable<Contact> table = new CellTable<Contact>();
+        CellTable<ClientInfo> table = new CellTable<ClientInfo>();
         table.setKeyboardSelectionPolicy(KeyboardSelectionPolicy.ENABLED);
         
         //checkbox
-        Column<Contact, Boolean> checkColumn;
-        checkColumn = new Column<Contact, Boolean>(
+        Column<ClientInfo, Boolean> checkColumn;
+        checkColumn = new Column<ClientInfo, Boolean>(
                 new CheckboxCell(true, false)) {
                     @Override
-                    public Boolean getValue(Contact object) {
+                    public Boolean getValue(ClientInfo object) {
                         return true;
                     }
                 };
         table.addColumn(checkColumn, SafeHtmlUtils.fromSafeConstant("<br/>"));
         table.setColumnWidth(checkColumn, 40, Unit.PX);
         
-        // Add a text column to show the name.
-        TextColumn<Contact> nameColumn =
-                new TextColumn<Contact>() {
+        // Add a text column to show the firstname.
+        TextColumn<ClientInfo> firstName =
+                new TextColumn<ClientInfo>() {
                     @Override
-                    public String getValue(Contact object) {
-                        return object.name;
+                    public String getValue(ClientInfo object) {
+                        return object.getFirstName();
                     }
                 };
-        table.addColumn(nameColumn, "Name");
+        table.addColumn(firstName, "Firstname");
         
-        // Add a date column to show the birthday.
-        DateCell dateCell = new DateCell();
-        Column<Contact, Date> dateColumn
-                = new Column<Contact, Date>(dateCell) {
+        // Add a text column to show the lastname.
+        TextColumn<ClientInfo> lastName =
+                new TextColumn<ClientInfo>() {
                     @Override
-                    public Date getValue(Contact object) {
-                        return object.birthday;
+                    public String getValue(ClientInfo object) {
+                        return object.getLastName();
                     }
                 };
-        table.addColumn(dateColumn, "Birthday");
+        table.addColumn(firstName, "Lastname");
         
         // Add a text column to show the address.
-        TextColumn<Contact> addressColumn
-                = new TextColumn<Contact>() {
+        TextColumn<ClientInfo> addressColumn
+                = new TextColumn<ClientInfo>() {
                     @Override
-                    public String getValue(Contact object) {
-                        return object.address;
+                    public String getValue(ClientInfo object) {
+                        return object.getAddress();
                     }
                 };
         table.addColumn(addressColumn, "Address");
         
-        AsyncDataProvider<Contact> provider = new AsyncDataProvider<Contact>() {
+        
+        AsyncDataProvider<ClientInfo> provider = new AsyncDataProvider<ClientInfo>() {
             @Override
-            protected void onRangeChanged(HasData<Contact> display) {
-                int start = display.getVisibleRange().getStart();
-                int end = start + display.getVisibleRange().getLength();
-                end = end >= CONTACTS.size() ? CONTACTS.size() : end;
-                List<Contact> sub = CONTACTS.subList(start, end);
-                updateRowData(start, sub);
+            protected void onRangeChanged(HasData<ClientInfo> display) {
+                final int start = display.getVisibleRange().getStart();
+                int length = display.getVisibleRange().getLength();
+                AsyncCallback<List<ClientInfo>> callback = new AsyncCallback<List<ClientInfo>>() {
+                    @Override
+                    public void onFailure(Throwable caught) {
+                        Window.alert(caught.getMessage());
+                    }
+                    @Override
+                    public void onSuccess(List<ClientInfo> result) {
+                        updateRowData(start, result);
+                    }
+                };
+                //call remote service to fetch the data.
+                clientservice.getAllClients(start, length, callback);
             }
         };
-        provider.addDataDisplay(table);
-        provider.updateRowCount(CONTACTS.size(), true);
         
+        provider.addDataDisplay(table);       
         SimplePager pager = new SimplePager();
         pager.setDisplay(table);
         
         // Add a selection model to handle user selection.
-        final SingleSelectionModel<Contact> selectionModel
-                = new SingleSelectionModel<Contact>();
+        final SingleSelectionModel<ClientInfo> selectionModel
+                = new SingleSelectionModel<ClientInfo>();
         table.setSelectionModel(selectionModel);
         selectionModel.addSelectionChangeHandler(
                 new SelectionChangeEvent.Handler() {
                     public void onSelectionChange(SelectionChangeEvent event) {
-                        Contact selected = selectionModel.getSelectedObject();
+                        ClientInfo selected = selectionModel.getSelectedObject();
                         if (selected != null) {
-                            Window.alert("You selected: " + selected.name);
+                            Window.alert("You selected: " + selected.getFirstName());
                         }
                     }
                 });
-        
-        // Set the total row count. This isn't strictly necessary,
-        // but it affects paging calculations, so its good habit to
-        // keep the row count up to date.
-        table.setRowCount(CONTACTS.size(), true);
-        table.setWidth("100", true);
-        table.setHeight(Constants.STANDARD_GRID_HEIGHT);
-        
-        // Push the data into the widget.
-        //table.setRowData(0, CONTACTS);
+        table.setWidth(Constants.STANDARD_GRID_WIDTH, true);
+        table.setPageSize(Constants.STANDARD_GRID_PAGESIZE);
         return table;
     }
     

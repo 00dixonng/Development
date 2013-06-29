@@ -26,16 +26,8 @@ public class ClientServiceClientImpl implements  ClientServiceClientInt {
         
     }
     
-    public void getAllClients() {
-        this.service.getClients(new ClientCallback());
+    public void getAllClients(int start, int length, AsyncCallback callback) {
+        this.service.getAllClientsInfo(start, length, callback);
     }  
     
-        private class ClientCallback implements AsyncCallback {
-        public void onFailure(Throwable caught) {
-            Alert.show(caught.getMessage(), AlertLevel.ERROR);
-        }
-        public void onSuccess(Object result) {
-            mainui.UpdateClients((List<Client>)result);
-        }
-    }
 }

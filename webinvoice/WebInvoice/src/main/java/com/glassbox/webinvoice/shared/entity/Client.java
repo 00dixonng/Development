@@ -5,7 +5,6 @@ import javax.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import com.google.gwt.view.client.ProvidesKey;
 
 /**
  * The persistent class for the client database table.
@@ -28,7 +27,7 @@ public class Client implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.ALL })
     @JoinColumn(name = "addressId")
     private Address address;
-    
+
     // bi-directional many-to-one association to Invoice
     @OneToMany(mappedBy = "client", fetch = FetchType.LAZY)
     private List<Invoice> invoices = new ArrayList<Invoice>();
@@ -98,14 +97,4 @@ public class Client implements Serializable {
     public void setUserId(User userId) {
         this.userId = userId;
     }
-        
-    /**
-     * The key provider that provides the unique ID of a contact.
-     */
-    public static final ProvidesKey<Client> KEY_PROVIDER = new ProvidesKey<Client>() {
-        @Override
-        public Object getKey(Client item) {
-            return item == null ? null : item.getId();
-        }
-    };
 }
